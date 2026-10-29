@@ -1,0 +1,19 @@
+{% extends "public_base.html" %}
+{% block title %}Forgot password - CyberAttend{% endblock %}
+{% block boxclass %}emp{% endblock %}
+{% block content %}
+<h1>Forgot password</h1>
+<p class="sub">Enter your username and the nickname you gave at signup</p>
+<form method="POST" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="field"><label>Username</label><input type="text" name="username" value="{{ username or '' }}" required autofocus></div>
+    <div class="field"><label>Nickname</label><input type="text" name="nickname" required maxlength="40"></div>
+    <div class="field"><label>New password</label><input type="password" name="new" required minlength="6"></div>
+    <div class="field"><label>Confirm new password</label><input type="password" name="confirm" required minlength="6"></div>
+    <button class="btn" type="submit">Set new password</button>
+</form>
+<div class="links">
+    <a href="{{ url_for('login') }}">Back to sign in</a><br>
+    <span class="muted">No nickname saved on your account? Ask the main admin.</span>
+</div>
+{% endblock %}

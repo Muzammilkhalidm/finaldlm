@@ -1,0 +1,25 @@
+{% extends "admin/base.html" %}
+{% block title %}Certificates{% endblock %}{% block heading %}Certificates{% endblock %}
+{% block content %}
+<div class="grid grid-main">
+  <div class="card">
+    <h2>Create certificate</h2>
+    <p class="muted">Choose an employee if applicable, or manually enter the recipient. The period can be any custom text, for example 3 months, 6 months, 12 months, 1 year, or a date range.</p>
+    <form method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="field"><label>Employee (optional)</label><select name="employee_id"><option value="">Manual recipient / former employee</option>{% for e in employees %}<option value="{{ e.id }}">{{ e.full_name }} — {{ e.username }}</option>{% endfor %}</select></div>
+      <div class="field"><label>Recipient name</label><input name="recipient_name" maxlength="120" placeholder="Name printed on certificate" required></div>
+      <div class="field"><label>Certificate heading</label><input name="certificate_title" value="Best Employee" maxlength="120" required></div>
+      <div class="field"><label>Employment / achievement period</label><input name="period" placeholder="e.g. 6 months / Jan 2026 – Jun 2026" maxlength="120" required></div>
+      <div class="field"><label>Description</label><textarea name="description" maxlength="2000" rows="4" required placeholder="Admin-written certificate description"></textarea></div>
+      <button class="btn" type="submit">Create certificate</button>
+    </form>
+  </div>
+  <div class="card"><h2>Previously created</h2>
+    {% for c in certificates %}
+      <div class="notice"><div class="row"><div><strong>{{ c.recipient_name }}</strong><p>{{ c.certificate_title }} · {{ c.period }}</p></div><span class="spacer"></span><a class="btn small" href="{{ url_for('admin_certificate_view', cert_id=c.id) }}">Open / Print</a></div><small>Created by {{ c.issued_by }} · {{ c.issued_at|dt }}</small>
+      <form method="POST" action="{{ url_for('admin_certificate_delete', cert_id=c.id) }}" class="mt-1"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn danger small" type="submit" onclick="return confirm('Delete this certificate?')">Delete</button></form></div>
+    {% else %}<p class="muted">No certificates created yet.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

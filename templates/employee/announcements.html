@@ -1,0 +1,13 @@
+{% extends "employee/base.html" %}
+{% block title %}Announcements{% endblock %}
+{% block heading %}Announcements from Admin{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>All announcements ({{ items|length }}){% if new_ids %} <span class="num">{{ new_ids|length }}</span> new{% endif %}</h2>
+    {% for a in items %}
+    <div class="notice"><div class="row"><span class="num {% if a.id not in new_ids %}old{% endif %}">{{ loop.index }}</span><h4>{{ a.title }}</h4>
+        {% if a.id in new_ids %}<span class="badge bad">New</span>{% endif %}</div>
+        <p>{{ a.body }}</p><small>{{ a.created_at|dt }} · {{ a.department_name or 'Everyone' }}</small></div>
+    {% else %}<p class="muted">No announcements yet.</p>{% endfor %}
+</div>
+{% endblock %}
